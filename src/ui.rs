@@ -1,3 +1,4 @@
+use nannou::glam::Vec2;
 use nannou::{event::WindowEvent, color, App, Frame};
 
 use crate::input::Input;
@@ -12,17 +13,19 @@ pub trait Draw {
 pub struct Ui {
     pub input: Input,
     content: Vec<UiElem>,
+    app_size: Vec2,
 }
 
 impl Ui {
     /// create new ui
-    pub fn new() -> Ui {
+    pub fn new(app_size: (u32,u32)) -> Ui {
 
         let input = Input::new();
 
         Ui {
             input,
-            content: Vec::new()
+            content: Vec::new(),
+            app_size: Vec2::new(app_size.0 as f32, app_size.1 as f32)
         }
     }
     /// handle input by calling Input struct from ui

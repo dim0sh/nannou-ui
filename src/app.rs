@@ -1,7 +1,6 @@
-use nannou::{color, prelude::*};
+use nannou::prelude::*;
 use crate::ui::{Ui, Draw};
-use crate::input::Input;
-use crate::ui_elem::{Button, UiElem};
+use crate::ui_elem::{Button, Label, UiElem};
 
 pub struct Model {
     ui: Ui,
@@ -9,13 +8,14 @@ pub struct Model {
 }
 
 pub fn model(app: &App) -> Model {
+    let size: (u32,u32) = (800,800);
     app.new_window()
-    .size(800,800)
+    .size(size.0,size.1)
     .view(view)
     .event(window_event)
     .build().unwrap();
     
-    let mut ui = Ui::new();
+    let ui = Ui::new(size);
 
     Model {
         ui,
@@ -32,16 +32,16 @@ fn view(app: &App, model: &Model, frame: Frame) {
     draw.to_frame(app, &frame).unwrap();
 }
 
-pub fn update(app: &App, model: &mut Model, update: Update) {
+pub fn update(_app: &App, model: &mut Model, _update: Update) {
     model.ui.refresh();
     model.ui.add(
-        UiElem::Button(
-            Button::new(String::from("test") ,(40,40), (0,0), RED)
+        UiElem::Label(
+            Label::new("test".to_string() ,(40,40), (0,0), RED)
         )
     );
     if model.ui.add(
         UiElem::Button(
-            Button::new(model.count.to_string(), (40,40), (100,100), BLUE)
+            Button::new(model.count.to_string(), (100,40), (0,100), BLUE)
         )
     ).clicked() {
         model.count += 1;

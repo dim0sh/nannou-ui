@@ -28,7 +28,6 @@ pub struct Button {
     size: Vec2,
     position: Vec2,
     color: color::Rgb8,
-    // f: fn()
 }
 
 impl Button {
@@ -45,17 +44,13 @@ impl Button {
     }
     /// update Button is_pressed with event using Input
     pub fn update(&mut self, input: &Input) {
-
-        if input.pointer.distance(self.position) < self.size.x 
+        if (input.pointer.x - self.position.x).abs() <= self.size.x/2.
+            && (input.pointer.y - self.position.y).abs() <= self.size.y/2. 
             && input.event == UiEvent::MousePressedLeft {
                 self.is_pressed = true;
         } else {
             self.is_pressed = false;
         }
-
-        // if self.is_pressed {
-        //     (self.f)()
-        // }
     }
 
 }
