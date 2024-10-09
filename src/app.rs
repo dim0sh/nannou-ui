@@ -1,13 +1,11 @@
 use nannou::{color, prelude::*};
-use crate::{ui, ui::Draw, ui::UiElem};
+use crate::ui::{Ui, Draw};
+use crate::input::Input;
+use crate::ui_elem::{Button, UiElem};
 
 pub struct Model {
-    mouse_position: Vec2,
-    // button: ui::Button,
-    // label: ui::Label,
-    // counter: ui::Label,
+    ui: Ui,
     count: u32,
-    container: ui::Container,
 }
 
 pub fn model(app: &App) -> Model {
@@ -16,55 +14,40 @@ pub fn model(app: &App) -> Model {
     .view(view)
     .event(window_event)
     .build().unwrap();
+    
+    let mut ui = Ui::new();
 
-    let label = ui::Label::new_label(String::from("HELLO"), (20,20), (0,0), RED);
-    let counter = ui::Label::new_label(String::from(""), (20,20), (300,0), BLACK);
-    let button = ui::Button::new_button(String::from("HELLO"), (20,20), (200,0), BLUE);
-
-    let container = ui::Container::new(
-        vec![
-            UiElem::Label(label),
-            UiElem::Label(counter),
-            UiElem::Button(button),
-        ]
-    );
-
-    Model { 
-        mouse_position: Vec2::new(0.0, 0.0),
-        // button,
-        // label,
-        // counter,
+    Model {
+        ui,
         count: 0,
-        container,
     }
 }
 
 fn view(app: &App, model: &Model, frame: Frame) {
     let draw = app.draw();
     draw.background().color(BLACK);
-    
-    model.container.draw(app, &frame);
 
-    // model.button.draw(app,&frame);
-    // model.label.draw(app,&frame);
-    // model.counter.draw(app,&frame);
+    model.ui.draw(app, &frame);
 
     draw.to_frame(app, &frame).unwrap();
 }
 
 pub fn update(app: &App, model: &mut Model, update: Update) {
-    // if model.button.is_pressed {
-    //     model.count += 1;
-    //     model.counter.text(model.count.to_string());
-    // }
+    model.ui.refresh();
+    model.ui.add(
+        UiElem::Button(
+            Button::new(String::from("test") ,(40,40), (0,0), RED)
+        )
+    );
+    if model.ui.add(
+        UiElem::Button(
+            Button::new(model.count.to_string(), (40,40), (100,100), BLUE)
+        )
+    ).clicked() {
+        model.count += 1;
+    };
 }
 
-fn window_event(app: &App, model: &mut Model, event: WindowEvent) {
-    // model.button.update(&event,model.mouse_position);
-    match event {
-        MouseMoved(mouse_pos) => {
-            model.mouse_position = mouse_pos;
-        }
-        _ => {}
-    }
+fn window_event(_app: &App, model: &mut Model, event: WindowEvent) {
+    model.ui.handle_input(event);
 }
