@@ -1,5 +1,6 @@
 use nannou::{prelude::*};
 
+/// Ui events enum for internal event handling
 #[derive(PartialEq)]
 pub enum UiEvent {
     Default,
@@ -7,19 +8,21 @@ pub enum UiEvent {
     MouseReleasedLeft,
 }
 
+/// struct handles input events
 pub struct Input {
     pub pointer: Vec2,
     pub event: UiEvent,
 }
 
 impl Input {
+    /// creates Input struct
     pub fn new() -> Input {
         Input {
             pointer: Vec2::new(0.0, 0.0),
             event: UiEvent::Default,
         }
     }
-
+    /// handles events with Input struct 
     pub fn handle_input(&mut self, event: WindowEvent) {
         match event {
             MouseMoved(mouse_pos) => {

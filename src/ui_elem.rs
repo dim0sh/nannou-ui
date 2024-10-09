@@ -1,6 +1,8 @@
 use nannou::{glam::Vec2, color, App, Frame};
 use crate::{input::{Input, UiEvent}, ui::Draw};
 
+
+/// enum to handle all ui elements
 #[derive(Clone)]
 pub enum UiElem {
     // Container(Container),
@@ -9,6 +11,7 @@ pub enum UiElem {
 }
 
 impl UiElem {
+    /// checks if is ui Element clicked
     pub fn clicked(&self) -> bool {
         match self {
             UiElem::Button(button) => button.is_pressed,
@@ -17,6 +20,7 @@ impl UiElem {
     }
 }
 
+/// Button ui element
 #[derive(Clone)]
 pub struct Button {
     text: String,
@@ -28,6 +32,7 @@ pub struct Button {
 }
 
 impl Button {
+    /// new Button
     pub fn new(text: String, size: (u32,u32), position: (u32,u32), color: color::Rgb8) -> Button {
         Button { 
             text,
@@ -38,6 +43,7 @@ impl Button {
             // f 
         }
     }
+    /// update Button is_pressed with event using Input
     pub fn update(&mut self, input: &Input) {
 
         if input.pointer.distance(self.position) < self.size.x 
@@ -53,7 +59,7 @@ impl Button {
     }
 
 }
-
+/// Draw trait for Button
 impl Draw for Button {
     fn draw(&self, app:&App, frame: &Frame) {
         let draw = app.draw();
@@ -67,6 +73,8 @@ impl Draw for Button {
         draw.to_frame(app, &frame).unwrap();
     }
 }
+
+/// Label ui element 
 #[derive(Clone)]
 pub struct Label {
     text: String,
@@ -76,6 +84,7 @@ pub struct Label {
 }
 
 impl Label {
+    /// new Label
     pub fn new(text: String, size: (u32,u32), position: (u32,u32), color: color::Rgb8) -> Label {
         Label { 
             text,
@@ -86,6 +95,7 @@ impl Label {
     }
 }
 
+/// draw trait for Label
 impl Draw for Label {
     fn draw(&self, app:&App, frame: &Frame) {
         let draw = app.draw();
