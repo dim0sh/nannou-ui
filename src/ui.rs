@@ -2,6 +2,7 @@ use nannou::glam::Vec2;
 use nannou::{event::WindowEvent, color, App, Frame};
 
 use crate::input::Input;
+use crate::memory::Memory;
 use crate::ui_elem::{Button, UiElem};
 
 /// Draw trait for ui and ui elements
@@ -12,8 +13,7 @@ pub trait Draw {
 /// Ui struct contains and handles input and ui
 pub struct Ui {
     pub input: Input,
-    content: Vec<UiElem>,
-    app_size: Vec2,
+    memory: Memory
 }
 
 impl Ui {
@@ -24,8 +24,7 @@ impl Ui {
 
         Ui {
             input,
-            content: Vec::new(),
-            app_size: Vec2::new(app_size.0 as f32, app_size.1 as f32)
+            memory: Memory::new(Vec2::new(app_size.0 as f32, app_size.1 as f32)),
         }
     }
     /// handle input by calling Input struct from ui
@@ -43,19 +42,19 @@ impl Ui {
 
             }
         }
-        self.content.push(ui_elem.clone());
+        self.memory.update(ui_elem.clone());
         ui_elem
     }
     /// overwrites content of ui.content with new vec (clear data)
-    pub fn refresh(&mut self) {
-        self.content = Vec::new();
+    pub fn clear(&mut self) {
+        self.memory.clear();
     }
 
 }
 /// draw trait for ui struct
 impl Draw for Ui {
     fn draw(&self, app:&App, frame: &Frame) {
-        self.content.iter().for_each(|elem| {
+        self.memory.get_ui().iter().for_each(|elem| {
             match elem {
                 UiElem::Button(x) => x.draw(app, frame),
                 UiElem::Label(x) => {x.draw(app, frame)},

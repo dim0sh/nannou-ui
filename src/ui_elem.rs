@@ -1,4 +1,6 @@
-use nannou::{glam::Vec2, color, App, Frame};
+use std::time::Duration;
+
+use nannou::{color, glam::Vec2, time::{self, DurationF64}, App, Frame};
 use crate::{input::{Input, UiEvent}, ui::Draw};
 
 
@@ -14,7 +16,9 @@ impl UiElem {
     /// checks if is ui Element clicked
     pub fn clicked(&self) -> bool {
         match self {
-            UiElem::Button(button) => button.is_pressed,
+            UiElem::Button(button) => {                
+                button.is_pressed
+            },
             UiElem::Label(_) => false,
         }
     }

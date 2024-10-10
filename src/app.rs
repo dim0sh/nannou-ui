@@ -1,6 +1,5 @@
-use std::ops::Not;
-
 use nannou::prelude::*;
+use crate::container::Container;
 use crate::ui::{Ui, Draw};
 use crate::ui_elem::{Button, Label, UiElem};
 
@@ -41,7 +40,9 @@ pub fn update(_app: &App, model: &mut Model, _update: Update) {
     if model.invert {
         label_color = GREEN;
     }
-    model.ui.refresh();
+
+
+    model.ui.clear();
     model.ui.add(
         UiElem::Label(
             Label::new("test".to_string() ,(40,40), (0,0), label_color)
