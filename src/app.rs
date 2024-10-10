@@ -1,3 +1,5 @@
+use std::ops::Not;
+
 use nannou::prelude::*;
 use crate::ui::{Ui, Draw};
 use crate::ui_elem::{Button, Label, UiElem};
@@ -5,6 +7,7 @@ use crate::ui_elem::{Button, Label, UiElem};
 pub struct Model {
     ui: Ui,
     count: u32,
+    invert: bool,
 }
 
 pub fn model(app: &App) -> Model {
@@ -20,6 +23,7 @@ pub fn model(app: &App) -> Model {
     Model {
         ui,
         count: 0,
+        invert: false,
     }
 }
 
@@ -33,10 +37,14 @@ fn view(app: &App, model: &Model, frame: Frame) {
 }
 
 pub fn update(_app: &App, model: &mut Model, _update: Update) {
+    let mut label_color = RED;
+    if model.invert {
+        label_color = GREEN;
+    }
     model.ui.refresh();
     model.ui.add(
         UiElem::Label(
-            Label::new("test".to_string() ,(40,40), (0,0), RED)
+            Label::new("test".to_string() ,(40,40), (0,0), label_color)
         )
     );
     if model.ui.add(
@@ -44,6 +52,7 @@ pub fn update(_app: &App, model: &mut Model, _update: Update) {
             Button::new(model.count.to_string(), (100,40), (0,100), BLUE)
         )
     ).clicked() {
+        model.invert = !model.invert; 
         model.count += 1;
     };
 }

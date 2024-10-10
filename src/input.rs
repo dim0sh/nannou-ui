@@ -1,4 +1,4 @@
-use nannou::{prelude::*};
+use nannou::prelude::*;
 
 /// Ui events enum for internal event handling
 #[derive(PartialEq)]
