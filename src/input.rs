@@ -1,13 +1,14 @@
 use nannou::prelude::*;
 
 /// Ui events enum for internal event handling
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
 pub enum UiEvent {
     Default,
     MousePressedLeft,
     MouseReleasedLeft,
 }
 
+#[derive(Clone)]
 /// struct handles input events
 pub struct Input {
     pub pointer: Vec2,

@@ -1,10 +1,11 @@
 use nannou::prelude::*;
-use crate::container::Container;
+use crate::container;
 use crate::ui::{Ui, Draw};
 use crate::ui_elem::{Button, Label, UiElem};
 
 pub struct Model {
-    ui: Ui,
+    window: container::Window,
+    // ui: Ui,
     count: u32,
     invert: bool,
 }
@@ -17,10 +18,11 @@ pub fn model(app: &App) -> Model {
     .event(window_event)
     .build().unwrap();
     
-    let ui = Ui::new(size);
+    // let ui = Ui::new(size);
 
     Model {
-        ui,
+        window: container::Window::new(),
+        // ui,
         count: 0,
         invert: false,
     }
@@ -30,34 +32,33 @@ fn view(app: &App, model: &Model, frame: Frame) {
     let draw = app.draw();
     draw.background().color(BLACK);
 
-    model.ui.draw(app, &frame);
+    // model.ui.draw(app, &frame);
+    model.window.draw(app, &frame);
 
     draw.to_frame(app, &frame).unwrap();
 }
 
 pub fn update(_app: &App, model: &mut Model, _update: Update) {
-    let mut label_color = RED;
-    if model.invert {
-        label_color = GREEN;
-    }
-
-
-    model.ui.clear();
-    model.ui.add(
-        UiElem::Label(
-            Label::new("test".to_string() ,(40,40), (0,0), label_color)
-        )
-    );
-    if model.ui.add(
-        UiElem::Button(
-            Button::new(model.count.to_string(), (100,40), (0,100), BLUE)
-        )
-    ).clicked() {
-        model.invert = !model.invert; 
-        model.count += 1;
-    };
+    model.window.content.clear();
+    model.window.content.push(container::Container::MainPanel(container::MainPanel{
+        ui: {
+            let mut ui = Ui::new((800, 800),model.window.input.clone());
+            ui.add(UiElem::Label(
+                        Label::new("test".to_string() ,(40,40), (0,0), RED)
+            ));
+            if ui.add(
+                UiElem::Button(
+                    Button::new(model.count.to_string(), (100,40), (0,100), BLUE)
+                )
+                ).clicked() {
+                    model.count += 1;
+                };
+            ui
+        }
+    }));
 }
 
 fn window_event(_app: &App, model: &mut Model, event: WindowEvent) {
-    model.ui.handle_input(event);
+    // model.ui.handle_input(event);
+    model.window.handle_input(event);
 }

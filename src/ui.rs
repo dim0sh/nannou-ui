@@ -1,7 +1,7 @@
 use nannou::glam::Vec2;
 use nannou::{event::WindowEvent, color, App, Frame};
 
-use crate::input::Input;
+use crate::input::{self, Input};
 use crate::memory::Memory;
 use crate::ui_elem::{Button, UiElem};
 
@@ -18,10 +18,16 @@ pub struct Ui {
 
 impl Ui {
     /// create new ui
-    pub fn new(app_size: (u32,u32)) -> Ui {
+    pub fn new_no_input(app_size: (u32,u32)) -> Ui {
 
         let input = Input::new();
 
+        Ui {
+            input,
+            memory: Memory::new(Vec2::new(app_size.0 as f32, app_size.1 as f32)),
+        }
+    }
+    pub fn new(app_size: (u32,u32), input: Input) -> Ui {
         Ui {
             input,
             memory: Memory::new(Vec2::new(app_size.0 as f32, app_size.1 as f32)),
